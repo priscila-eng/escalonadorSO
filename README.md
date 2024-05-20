@@ -5,6 +5,7 @@
 - 170105067 Hyago Gabriel Oliveira Figueiredo
 - 180076272 Jonas de Souza Fagundes
 - 190094699 Priscila Rodrigues
+- 190113219 Maria Eduarda Alves de Sousa
 
 ### Clonar repo:
 
