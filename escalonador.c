@@ -5,7 +5,10 @@
 #include <unistd.h>
 #include <sys/ipc.h>
 
-int main(int argc, char **argv){
+#define KEY 170105067
+
+int main(int argc, char **argv)
+{
 
     int cores = atoi(argv[1]);
     printf("Cores: %d\n", cores);
@@ -18,38 +21,59 @@ int main(int argc, char **argv){
         int index;
         float time;
     };
-    
+
     struct processo env;
 
+    int queue = 0;
 
-    int queue = msgget(0x1900, IPC_CREAT | 0x1FF);
-    printf("Queue: %x\n", queue);
+    if ((queue = msgget(KEY, 0666 | IPC_CREAT)) < 0)
+    {
+        printf("Erro ao criar fila com ID: %x\n", KEY);
+        exit(1);
+    }
+    else
+    {
+        printf("Queue: %x\n", queue);
+    }
 
-    int pid = fork();
+    int pid = 0;
 
-    
+    if ((pid = fork()) < 0)
+    {
+        printf("Erro: FORK");
+        exit(1);
+    }
 
     // msgctl(queue, IPC_RMID, NULL);
 
-    if(pid == 0){
-        int ret = execl("./teste15", "teste15", queue, 0, NULL);
-        printf("ret teste15");
-    } else {
+    if (pid == 0)
+    {
+        int ret = execl("./testeXX", "teste15", "15", "1", NULL);
+        printf("Ret15: %d\n", ret);
+    }
+    else
+    {
         pidTeste15 = pid;
 
-        pid = fork();
+        if ((pid = fork()) < 0)
+        {
+            printf("Erro: FORK");
+            exit(1);
+        }
 
-        if(pid == 0){
-            int ret = execl("./teste30", "teste30", NULL);
-            printf("%d", ret);
-        } else {
+        if (pid == 0)
+        {
+            int ret = execl("./testeXX", "teste30", "30", "2", NULL);
+            printf("Ret30: %d\n", ret);
+        }
+        else
+        {
             pidTeste30 = pid;
 
-            printf("%d\n", pidTeste15);
-            printf("%d\n", pidTeste30);
+            printf("PidTeste15: %d\n", pidTeste15);
+            printf("PidTeste30: %d\n", pidTeste30);
         }
     }
 
     return 0;
-
 }
