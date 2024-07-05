@@ -4,6 +4,7 @@
 #include <sys/msg.h>
 #include <unistd.h>
 #include <sys/ipc.h>
+#include "readfile.h"
 
 #define KEY 170105067
 
@@ -12,6 +13,8 @@ int main(int argc, char **argv)
 
     int cores = atoi(argv[1]);
     printf("Cores: %d\n", cores);
+    int num_processes;
+    Process *processes = read_input_file("input.txt", &num_processes);
 
     int pidTeste15, pidTeste30 = 0;
 
@@ -74,6 +77,6 @@ int main(int argc, char **argv)
             printf("PidTeste30: %d\n", pidTeste30);
         }
     }
+   return 0 ;
 
-    return 0;
 }
