@@ -11,8 +11,8 @@ EXECUTABLES = escalonador testeXX leitor
 all: $(EXECUTABLES)
 
 # Regra específica para compilar o escalonador
-escalonador: escalonador.c readfile.c
-	@$(CC) $(CFLAGS) escalonador.c readfile.c -o escalonador
+escalonador: escalonador.c readfile.c removeDependencia.c
+	@$(CC) $(CFLAGS) escalonador.c readfile.c removeDependencia.c -o escalonador
 
 # Regra específica para compilar o testeXX
 testeXX: testeXX.c

@@ -4,6 +4,7 @@
 #include <sys/msg.h>
 #include <unistd.h>
 #include <sys/ipc.h>
+#include <sys/wait.h>
 #include "readfile.h"
 
 #define KEY 170105067
@@ -26,7 +27,6 @@ int main(int argc, char **argv)
     };
 
     struct processo env;
-
     int queue = 0;
 
     if ((queue = msgget(KEY, 0666 | IPC_CREAT)) < 0)
@@ -57,7 +57,9 @@ int main(int argc, char **argv)
     else
     {
         pidTeste15 = pid;
-
+        int status;
+        wait(&status);
+        remove_dependencie(processes, WEXITSTATUS(status));
         if ((pid = fork()) < 0)
         {
             printf("Erro: FORK");
@@ -72,7 +74,10 @@ int main(int argc, char **argv)
         else
         {
             pidTeste30 = pid;
-
+            int status;
+            wait(&status);
+            printf("index no escalonador: %d\n", WEXITSTATUS(status));
+            remove_dependencie(processes, WEXITSTATUS(status));
             printf("PidTeste15: %d\n", pidTeste15);
             printf("PidTeste30: %d\n", pidTeste30);
         }

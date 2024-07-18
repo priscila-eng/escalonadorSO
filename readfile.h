@@ -12,4 +12,6 @@ typedef struct {
 
 Process* read_input_file(const char *filename, int *num_processes);
 
+Process* remove_dependencie(Process *processes, int index);
+
 #endif /* READFILE_H */
