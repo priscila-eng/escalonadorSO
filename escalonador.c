@@ -57,9 +57,9 @@ int main(int argc, char **argv)
     else
     {
         pidTeste15 = pid;
-        int status;
-        wait(&status);
-        remove_dependencie(processes, WEXITSTATUS(status));
+
+        // o 1 é o indice do processo, após conectar com a fila, passamos dinamicamente
+        remove_dependencie(processes, 1);
         if ((pid = fork()) < 0)
         {
             printf("Erro: FORK");
@@ -74,10 +74,9 @@ int main(int argc, char **argv)
         else
         {
             pidTeste30 = pid;
-            int status;
-            wait(&status);
-            printf("index no escalonador: %d\n", WEXITSTATUS(status));
-            remove_dependencie(processes, WEXITSTATUS(status));
+
+            // o 2 é o indice do processo, após conectar com a fila, passamos dinamicamente
+            remove_dependencie(processes, 2);
             printf("PidTeste15: %d\n", pidTeste15);
             printf("PidTeste30: %d\n", pidTeste30);
         }
