@@ -37,3 +37,14 @@ Process* remove_dependencie(Process *processes, int index) {
 
     return processes;
 }
+
+int getFirstProcessReady(Process *processes) {
+    for(int i = 0; i < sizeof(processes); i++){
+        Process *current_process = &processes[i];
+
+        if(current_process -> num_dependencies = 1 && current_process -> dependencies[0] == 0){
+            return current_process -> id;
+        }
+    }
+    return -1;
+}

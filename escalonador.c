@@ -81,6 +81,8 @@ int main(int argc, char **argv)
             printf("PidTeste30: %d\n", pidTeste30);
         }
     }
+
+    printf("Indice processo ready: %d\n", getFirstProcessReady(processes));
    return 0 ;
 
 }

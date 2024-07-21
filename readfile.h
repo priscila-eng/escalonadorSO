@@ -14,4 +14,6 @@ Process* read_input_file(const char *filename, int *num_processes);
 
 Process* remove_dependencie(Process *processes, int index);
 
+int getFirstProcessReady(Process *processes);
+
 #endif /* READFILE_H */
