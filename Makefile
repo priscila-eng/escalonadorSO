@@ -1,31 +1,38 @@
+# Compilador e flags
 CC = gcc
-CFLAGS = 
+CFLAGS = -Wall -g -Iinclude
 
-# Lista de arquivos fonte a serem compilados
-SOURCES = escalonador.c testeXX.c leitor.c readfile.c
+# Diretórios
+SRC_DIR = src
+OBJ_DIR = obj
 
-# Gera uma lista de nomes de executáveis correspondentes aos arquivos fonte
-EXECUTABLES = escalonador testeXX leitor
+# Executáveis
+EXECUTABLES = escalonador testeXX
 
-# Regra padrão: compila todos os executáveis
+# Arquivos fonte e objetos para o escalonador
+ESCALONADOR_SRC = $(SRC_DIR)/escalonador.c $(SRC_DIR)/readfile.c $(SRC_DIR)/trataDependencia.c
+ESCALONADOR_OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(ESCALONADOR_SRC))
+
+# Arquivos fonte e objetos para o testeXX
+TESTEXX_SRC = $(SRC_DIR)/testeXX.c
+TESTEXX_OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(TESTEXX_SRC))
+
+# Regra padrão
 all: $(EXECUTABLES)
 
-# Regra específica para compilar o escalonador
-escalonador: escalonador.c readfile.c trataDependencia.c
-	@$(CC) $(CFLAGS) escalonador.c readfile.c trataDependencia.c -o escalonador
+# Regra para compilar o escalonador
+escalonador: $(ESCALONADOR_OBJ)
+	@ $(CC) $(CFLAGS) -o $@ $^
 
-# Regra específica para compilar o testeXX
-testeXX: testeXX.c
-	@$(CC) $(CFLAGS) testeXX.c -o testeXX
+# Regra para compilar o testeXX
+testeXX: $(TESTEXX_OBJ)
+	@ $(CC) $(CFLAGS) -o $@ $^
 
-# Regra específica para compilar o leitor
-leitor: leitor.c
-	@$(CC) $(CFLAGS) leitor.c -o leitor
+# Regra para compilar arquivos objeto
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	@ $(CC) $(CFLAGS) -c -o $@ $<
 
-exec:
-	@make --no-print-directory
-	@./escalonador 2
-
-# Alvo para limpar arquivos gerados
+# Limpeza
 clean:
-	@rm -f $(EXECUTABLES)
+	@ rm -rf $(OBJ_DIR)/*.o $(EXECUTABLES)

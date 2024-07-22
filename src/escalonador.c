@@ -1,33 +1,44 @@
-#include <sys/types.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/msg.h>
-#include <unistd.h>
-#include <sys/ipc.h>
-#include <sys/wait.h>
-#include "readfile.h"
+#include "escalonador.h"
 
-#define KEY 170105067
+int queue = 0;
+int num_processes;
+
+void qreader()
+{
+    struct processo msg;
+
+    // Obtendo a fila de mensagens existente
+    if ((queue = msgget(KEY, 0666)) == -1)
+    {
+        perror("msgget");
+        exit(1);
+    }
+
+    if (msgrcv(queue, &msg, sizeof(struct processo) - sizeof(long), 0, 0) == -1)
+    {
+        perror("msgrcv");
+        exit(1);
+    }
+
+    // Processando a mensagem recebida
+    printf("Mensagem recebida:\n");
+    printf("PID: %d\n", msg.pid);
+    printf("Índice: %d\n", msg.index);
+    printf("Tempo: %f segundos\n", msg.time);
+    printf("\n");
+}
 
 int main(int argc, char **argv)
 {
+    signal(SIGUSR1, qreader);
 
     int cores = atoi(argv[1]);
     printf("Cores: %d\n", cores);
-    int num_processes;
     Process *processes = read_input_file("input.txt", &num_processes);
 
+    printf("Num de processos: %i\n", num_processes);
+
     int pidTeste15, pidTeste30 = 0;
-
-    struct processo
-    {
-        int pid;
-        int index;
-        float time;
-    };
-
-    struct processo env;
-    int queue = 0;
 
     if ((queue = msgget(KEY, 0666 | IPC_CREAT)) < 0)
     {
@@ -83,6 +94,9 @@ int main(int argc, char **argv)
     }
 
     printf("Indice processo ready: %d\n", getFirstProcessReady(processes));
-   return 0 ;
 
+    while (1)
+        ;
+
+    return 0;
 }

@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/ipc.h>
 #include <time.h>
+#include <signal.h>
 
 #define KEY 170105067
 
@@ -38,7 +39,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        printf("Queue: %x\n", queue);
+        // printf("Queue: %x\n", queue);
     }
     //************************************************
 
@@ -78,7 +79,13 @@ int main(int argc, char **argv)
     }
 
     printf("Tempo de execução: %f segundos\n", cpu_time_used);
-    printf("Index no arquivo teste %d\n", env.index);
-    exit(env.index);
+    // printf("Index no arquivo teste %d\n", env.index);
+
+    // Enviar sinal SIGUSR1
+    if (kill(getppid(), SIGUSR1) == -1) {
+        perror("Erro ao enviar sinal");
+        exit(1);
+    }
+
     return 0;
 }
