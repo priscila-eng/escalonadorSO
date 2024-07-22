@@ -10,7 +10,7 @@
 #define KEY 170105067
 
 #define CLI_TEST 0
-// #define CLI_TEST 1
+//#define CLI_TEST 1
 
 struct processo
 {
