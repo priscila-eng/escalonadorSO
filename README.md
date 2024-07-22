@@ -38,12 +38,12 @@ git clone https://github.com/priscila-eng/escalonadorSO.git
 
 - Utilizar os seguintes comandos, também no path do executável (raiz do projeto):
   ```
-  ./testeXX 15 1
+  ./testeXX 15
   ```
   ```
-  ./testeXX 30 1
+  ./testeXX 30
   ```
-  ``./testeXX <Tempo> <Índice>``
+  ``./testeXX <Tempo>``
 
 ## Saída do Programa:
 
