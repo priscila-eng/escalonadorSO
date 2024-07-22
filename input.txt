@@ -5,4 +5,4 @@
 5 teste30 2,3,#
 6 teste15 4,5,#
 7 teste30 7,#
-8 teste15 6,7,5,#
+8 teste15 6,7,#

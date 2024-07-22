@@ -30,26 +30,23 @@ void qreader()
 
 int main(int argc, char **argv)
 {
+    // Prepara escalonador para desviar quando um sinal chegar
+    // Neste caso, servirá para Sync entre escalonador e processos teste
     signal(SIGUSR1, qreader);
 
     int cores = atoi(argv[1]);
     printf("Cores: %d\n", cores);
-    Process *processes = read_input_file("input.txt", &num_processes);
 
+    Process *processes = read_input_file("input.txt", &num_processes);
     printf("Num de processos: %i\n", num_processes);
 
-    int pidTeste15, pidTeste30 = 0;
-
-    if ((queue = msgget(KEY, 0666 | IPC_CREAT)) < 0)
-    {
-        printf("Erro ao criar fila com ID: %x\n", KEY);
+    // Abstração do processo de criação e obtenção da fila de mensagens
+    // Programa só roda se a fila estiver vazia
+    if ((queue = retorna_fila(KEY)) < 0){
         exit(1);
     }
-    else
-    {
-        printf("Queue: %x\n", queue);
-    }
 
+    int pidTeste15, pidTeste30 = 0;
     int pid = 0;
 
     if ((pid = fork()) < 0)
@@ -57,8 +54,6 @@ int main(int argc, char **argv)
         printf("Erro: FORK");
         exit(1);
     }
-
-    // msgctl(queue, IPC_RMID, NULL);
 
     if (pid == 0)
     {
@@ -95,8 +90,13 @@ int main(int argc, char **argv)
 
     printf("Indice processo ready: %d\n", getFirstProcessReady(processes));
 
-    while (1)
-        ;
+    while (1){
+        /* Função do escalonador deve rodar aqui e a condição de parada deve ser o 
+        final da execução do último processo */
+    }
+
+    // Remove a fila ao final da execução
+    msgctl(queue, IPC_RMID, NULL);
 
     return 0;
 }

@@ -19,9 +19,9 @@ git clone https://github.com/priscila-eng/escalonadorSO.git
 
 - Para compilar o programa
   ```
-  make compile
+  make
   ```
-- Para compilar e rodar o trabalho de uma vez só
+- Para compilar e rodar o trabalho com número de cores = 2
   ```
   make exec
   ```
@@ -31,6 +31,19 @@ git clone https://github.com/priscila-eng/escalonadorSO.git
   ```
 
   **IMPORTANTE QUE NÃO HAJA MUDANÇA NOS DIRETÓRIOS PARA UM BOM FUNCIONAMENTO DO PROGRAMA**
+
+*OBS:* Há dois passos para testar os executáveis "teste15" e "teste30".
+- O primeiro deles é alterar o define no [.c](./src/testeXX.c) para ``#define CLI_TEST 1`` 
+  - Dessa forma, não há tentativa de troca de sinais entre os processos. **O envio para a lista de mensagens continua.**
+
+- Utilizar os seguintes comandos, também no path do executável (raiz do projeto):
+  ```
+  ./testeXX 15 1
+  ```
+  ```
+  ./testeXX 30 1
+  ```
+  ``./testeXX <Tempo> <Índice>``
 
 ## Saída do Programa:
 

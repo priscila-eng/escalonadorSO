@@ -10,7 +10,7 @@ OBJ_DIR = obj
 EXECUTABLES = escalonador testeXX
 
 # Arquivos fonte e objetos para o escalonador
-ESCALONADOR_SRC = $(SRC_DIR)/escalonador.c $(SRC_DIR)/readfile.c $(SRC_DIR)/trataDependencia.c
+ESCALONADOR_SRC = $(SRC_DIR)/escalonador.c $(SRC_DIR)/readfile.c $(SRC_DIR)/trataDependencia.c $(SRC_DIR)/fila.c
 ESCALONADOR_OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(ESCALONADOR_SRC))
 
 # Arquivos fonte e objetos para o testeXX

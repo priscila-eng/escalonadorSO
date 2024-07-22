@@ -9,6 +9,9 @@
 
 #define KEY 170105067
 
+#define CLI_TEST 0
+// #define CLI_TEST 1
+
 struct processo
 {
     long mtype; // Campo necessário para mensagens
@@ -23,23 +26,23 @@ int main(int argc, char **argv)
 {
     // Verificando requisitos de execução do código
     //************************************************
-    if (argc < 2) // Verifica se há pelo menos 3 argumentos
+    if (argc < 2 || (CLI_TEST && (argc < 2))) // Verifica se há pelo menos 3 argumentos
     {
         printf("ERRO: Número errado de parâmetros\n");
         exit(-1);
     }
 
     int time_param = atoi(argv[1]);
-    int index_param = atoi(argv[2]); // Converte argv[2] para int
+    int index_param = 0;
 
-    if ((queue = msgget(KEY, 0666)) < 0)
+    if (!CLI_TEST)
     {
-        perror("Erro ao obter fila com ID");
-        exit(1);
-    }
-    else
-    {
-        // printf("Queue: %x\n", queue);
+        index_param = atoi(argv[2]); // Converte argv[2], o índice
+        if ((queue = msgget(KEY, 0666)) < 0)
+        {
+            perror("Erro ao obter fila com ID");
+            exit(1);
+        }
     }
     //************************************************
 
@@ -51,11 +54,12 @@ int main(int argc, char **argv)
 
     struct processo env;
 
-    printf("Fila recebida: %d\n", queue);
+    // printf("Fila recebida: %d\n", queue);
 
     while (1)
     {
-        for (i = 0; i < 8000000000; i++);
+        for (i = 0; i < 8000000000; i++)
+            ;
         end = clock();
         cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
         if (cpu_time_used >= time_param)
@@ -73,18 +77,27 @@ int main(int argc, char **argv)
 
     env.time = cpu_time_used;
 
-    if (msgsnd(queue, &env, sizeof(env) - sizeof(long), 0) == -1) { // Exclui o campo mtype do tamanho
-        perror("Erro ao enviar mensagem");
-        exit(1);
+    if (!CLI_TEST)
+    {
+        if (msgsnd(queue, &env, sizeof(env) - sizeof(long), 0) == -1)
+        { // Exclui o campo mtype do tamanho
+            perror("Erro ao enviar mensagem");
+            exit(1);
+        }
     }
 
-    printf("Tempo de execução: %f segundos\n", cpu_time_used);
-    // printf("Index no arquivo teste %d\n", env.index);
+    printf("Index no arquivo teste %d\t", env.index);
+    printf("Tempo de execução: %.3f segundos\n", cpu_time_used);
 
-    // Enviar sinal SIGUSR1
-    if (kill(getppid(), SIGUSR1) == -1) {
-        perror("Erro ao enviar sinal");
-        exit(1);
+    // Se rodar, via linha de comando, não há necessidade da troca de sinais.
+    if (!CLI_TEST)
+    {
+        // Enviar sinal SIGUSR1
+        if (kill(getppid(), SIGUSR1) == -1)
+        {
+            perror("Erro ao enviar sinal");
+            exit(1);
+        }
     }
 
     return 0;
