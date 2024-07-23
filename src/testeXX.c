@@ -10,7 +10,7 @@
 #define KEY 170105067
 
 #define CLI_TEST 0
-//#define CLI_TEST 1
+// #define CLI_TEST 1
 
 struct processo
 {
@@ -32,7 +32,9 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
+
     int time_param = atoi(argv[1]);
+
     int index_param = 0;
 
     if (!CLI_TEST)
@@ -53,8 +55,6 @@ int main(int argc, char **argv)
     start = clock();
 
     struct processo env;
-
-    // printf("Fila recebida: %d\n", queue);
 
     while (1)
     {
@@ -85,9 +85,7 @@ int main(int argc, char **argv)
             exit(1);
         }
     }
-
-    printf("Index no arquivo teste %d\t", env.index);
-    printf("Tempo de execução: %.3f segundos\n", cpu_time_used);
+    printf("Turnaround: %.3f segundos do index %d\n", cpu_time_used, env.index);
 
     // Se rodar, via linha de comando, não há necessidade da troca de sinais.
     if (!CLI_TEST)

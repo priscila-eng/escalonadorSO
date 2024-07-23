@@ -10,9 +10,12 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <signal.h>
+#include <string.h>
+#include <time.h>
 
 #include "readfile.h"
 #include "fila.h"
+
 
 #define KEY 170105067
 

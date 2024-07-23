@@ -33,6 +33,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	@ $(CC) $(CFLAGS) -c -o $@ $<
 
+exec: 
+	@make;
+	@./escalonador 1
 # Limpeza
 clean:
 	@ rm -rf $(OBJ_DIR)/*.o $(EXECUTABLES)
