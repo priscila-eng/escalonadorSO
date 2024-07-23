@@ -34,7 +34,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@ $(CC) $(CFLAGS) -c -o $@ $<
 
 exec: 
-	@make;
+	@make  --no-print-directory;
 	@./escalonador 1
 # Limpeza
 clean:
