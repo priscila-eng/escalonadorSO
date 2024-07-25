@@ -24,19 +24,26 @@ Process* remove_dependencie(Process *processes, int index) {
             }
         }
     }
-    
 
     return processes;
 }
 
 int getFirstProcessReady(Process *processes) {
+    int indexFirst = -1;
+
+
     for(int i = 0; i < sizeof(processes); i++){
         Process *current_process = &processes[i];
 
         if((current_process -> num_dependencies == 1) && (current_process -> dependencies[0] == 0)){
-            printf("NUM_DEPENDECIES %d\n", current_process -> num_dependencies);
-            return i;
+        
+            if(strcmp("teste15", current_process -> command) == 0){
+                return i;
+            } else {
+                indexFirst = i;
+            }
         }
     }
-    return -1;
+
+    return indexFirst;
 }

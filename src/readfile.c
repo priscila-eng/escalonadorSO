@@ -37,12 +37,6 @@ Process* read_input_file(const char *filename, int *num_processes) {
             current_process->dependencies[current_process->num_dependencies++] = atoi(token);
             token = strtok(NULL, ",");
         }
-        // printando para testar se esta lendo corretamente
-        printf("id:%d comando:%s dependências:", current_process->id, current_process->command);
-        for (int j = 0; j < current_process->num_dependencies; ++j) {
-            printf(" %d", current_process->dependencies[j]);
-        }
-        printf("\n");
     }
 
     fclose(file);

@@ -1,3 +1,33 @@
+/* INTEGRANTES
+- Matrícula - Nome
+- 170105067 - Hyago Gabriel Oliveira Figueiredo
+- 180076272 - Jonas de Souza Fagundes
+- 190113219 - Maria Eduarda Alves de Sousa
+- 190094699 - Priscila Angel Rodrigues Silva
+*/
+/* INFORMAÇÕES DE AMBIENTE
+- Compilador: GCC
+- Sistema Operacional: Unix
+- Ambiente utilizado para programar: Visual Studio Code
+*/
+/* COMO EXECUTAR
+1) Makefile:
+    a) executar comando make
+    b) em seguida, make exec
+    c) para mudar o número de cores, pode alterar o makefile (regra exec) ou após executar o make, executar o comando ./escalonador <cores>
+2) ./escalonador 2
+*/
+/* INPUT.TXT
+1 teste15 0,#
+2 teste15 1,#
+3 teste30 1,#
+4 teste15 1,#
+5 teste30 2,3,#
+6 teste15 4,5,#
+7 teste30 7,#
+8 teste15 6,7,#
+*/
+
 #include "escalonador.h"
 
 int queue = 0;
@@ -7,10 +37,12 @@ int num_processes_running;
 
 struct processo* finishProcess;
 Process *processes;
+clock_t start;
 
 void qreader()
 {
     struct processo msg;
+    clock_t end;
 
     // Obtendo a fila de mensagens existente
     if ((queue = msgget(KEY, 0666)) == -1)
@@ -29,8 +61,12 @@ void qreader()
     finishProcess[posArray] = msg;
     remove_dependencie(processes, finishProcess[posArray].index);
     --num_processes_running;
-    kill(msg.pid, SIGKILL);
     posArray++;
+    end = clock();
+    double turnaround = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Turnaround: %.3f segundos do index %d\n", turnaround, msg.index);
+    int status;
+    wait(&status);
 }
 
 int executa(int j){
@@ -59,20 +95,29 @@ int executa(int j){
 
 int main(int argc, char **argv)
 {
-    clock_t start, end;
+    if (argc < 2) // Verifica se há pelo menos 3 argumentos
+    {
+        printf("ERRO: Número errado de parâmetros\n");
+        exit(-1);
+    }
+    int cores = atoi(argv[1]);
+    if (cores <= 0){
+        printf("Número de cores inválido");
+        return 0;
+    }
+
     double cpu_time_used;
+    clock_t end;
 
     start = clock();
     // Prepara escalonador para desviar quando um sinal chegar
     // Neste caso, servirá para Sync entre escalonador e processos teste
-    signal(SIGUSR1, qreader);
+    signal(SIGCHLD, qreader);
 
-    int cores = atoi(argv[1]);
+
     printf("Cores: %d\n", cores);
 
     processes = read_input_file("input.txt", &num_processes);
-    
-    // printf("Num de processos: %i\n", num_processes);
 
     struct processo finishAux[num_processes];
     for(int i = 0; i < num_processes; i++){
@@ -106,14 +151,12 @@ int main(int argc, char **argv)
             }
             int ret = executa(index);
             if(ret == 10){
-                printf("SUCESSO\n");
                 processes[index].dependencies[0] = -1;
                 ++num_processes_running;
             } else {
                 printf("DEU RUIM NO FORK\n");
             }
         }
-       
         /* Função do escalonador deve rodar aqui e a condição de parada deve ser o 
         final da execução do último processo */
     }

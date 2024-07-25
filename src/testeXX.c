@@ -84,19 +84,8 @@ int main(int argc, char **argv)
             perror("Erro ao enviar mensagem");
             exit(1);
         }
+    } else {
+        printf("Turnaround: %.3f segundos do index %d\n", cpu_time_used, env.index);
     }
-    printf("Turnaround: %.3f segundos do index %d\n", cpu_time_used, env.index);
-
-    // Se rodar, via linha de comando, não há necessidade da troca de sinais.
-    if (!CLI_TEST)
-    {
-        // Enviar sinal SIGUSR1
-        if (kill(getppid(), SIGUSR1) == -1)
-        {
-            perror("Erro ao enviar sinal");
-            exit(1);
-        }
-    }
-
     return 0;
 }
