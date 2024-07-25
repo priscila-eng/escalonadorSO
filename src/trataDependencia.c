@@ -28,9 +28,13 @@ Process* remove_dependencie(Process *processes, int index) {
     return processes;
 }
 
-int getFirstProcessReady(Process *processes) {
+/* Método de escalonamento:
+    Dá preferência para executar primeiro os processos de 15 segundos. 
+    Se entre os prontos não tiver processos de 15 segundos, o primeiro processo ready de 30 segundos é executado.
+    Para verificar se o processo está pronto, verificamos se ele tem, apenas, uma dependência e se essa dependência é 0.
+*/
+int getProcessReady(Process *processes) {
     int indexFirst = -1;
-
 
     for(int i = 0; i < sizeof(processes); i++){
         Process *current_process = &processes[i];
@@ -40,7 +44,9 @@ int getFirstProcessReady(Process *processes) {
             if(strcmp("teste15", current_process -> command) == 0){
                 return i;
             } else {
-                indexFirst = i;
+                if (indexFirst == -1){
+                    indexFirst = i;
+                }
             }
         }
     }

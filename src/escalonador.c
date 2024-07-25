@@ -139,18 +139,21 @@ int main(int argc, char **argv)
             continue;
         }
         if(num_processes_running == 0){
-            int index = getFirstProcessReady(processes);
+            int index = getProcessReady(processes);
             if(index == -1){
                 break;
             }
         }
         if (num_processes_running < cores){
-            int index = getFirstProcessReady(processes);
+            int index = getProcessReady(processes);
             if(index == -1){
                 continue;
             }
             int ret = executa(index);
             if(ret == 10){
+                /* atualiza a dependência para -1, número escolhido para indicar que o processo já etá sendo ou já foi executado
+                   com isso, o escalonador não precisa executá-lo novamente
+                */
                 processes[index].dependencies[0] = -1;
                 ++num_processes_running;
             } else {
