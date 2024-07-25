@@ -6,15 +6,17 @@
 - 190094699 - Priscila Angel Rodrigues Silva
 */
 /* INFORMAÇÕES DE AMBIENTE
-- Compilador: GCC
-- Sistema Operacional: Unix
+- Compilador: GCC - versão 11.4.0
+- Sistema Operacional: Unix - Ubuntu 22.04
 - Ambiente utilizado para programar: Visual Studio Code
 */
 /* COMO EXECUTAR
 1) Makefile:
     a) executar comando make
     b) em seguida, make exec
-    c) para mudar o número de cores, pode alterar o makefile (regra exec) ou após executar o make, executar o comando ./escalonador <cores>
+    c) para mudar o número de cores:
+        i)  alterar o makefile (regra exec)
+        ii) após executar o make, executar o comando ./escalona <cores>
 2) ./escalonador 2
 */
 /* INPUT.TXT
@@ -64,7 +66,7 @@ void qreader()
     posArray++;
     end = clock();
     double turnaround = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Turnaround: %.3f segundos do index %d\n", turnaround, msg.index);
+    printf("Turnaround do processo %d: %.3f segundos.\n", msg.index, turnaround);
     int status;
     wait(&status);
 }
@@ -85,6 +87,7 @@ int executa(int j){
         char str[10];
         sprintf(str, "%d", processes[j].id);
         
+        printf("Processo número %d executando.\n", processes[j].id);
         int ret = execl("./testeXX", processes[j].command, time, str, NULL);
         printf("Ret15: %d\n", ret);
         return -1;
@@ -113,9 +116,6 @@ int main(int argc, char **argv)
     // Prepara escalonador para desviar quando um sinal chegar
     // Neste caso, servirá para Sync entre escalonador e processos teste
     signal(SIGCHLD, qreader);
-
-
-    printf("Cores: %d\n", cores);
 
     processes = read_input_file("input.txt", &num_processes);
 

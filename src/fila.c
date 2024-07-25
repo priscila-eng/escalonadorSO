@@ -9,10 +9,6 @@ int retorna_fila(int chave)
         printf("Erro ao criar fila com ID: %x\n", chave);
         return -1;
     }
-    else
-    {
-        printf("Queue: %x\n", queue);
-    }
 
     // Estrutura para armazenar informações sobre a fila de mensagens
     struct msqid_ds buf;
