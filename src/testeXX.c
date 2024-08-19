@@ -68,6 +68,9 @@ int main(int argc, char **argv)
         }
     }
 
+    // escolha de programação. 
+    // Iamos utilizar para diferenciar a mensagem do filho e a mensagem do escalonador, mas não precisou
+    // Lemos a mensagem sequencialmente
     env.mtype = 1; // Define o tipo de mensagem
     env.pid = getpid();
     env.index = index_param;
