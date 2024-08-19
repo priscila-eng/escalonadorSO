@@ -11,6 +11,7 @@ Process* remove_dependencie(Process *processes, int index) {
         for (int j = 0; j < current_process -> num_dependencies; j++){
             if(current_process -> dependencies[j] == index){
                 if(current_process -> num_dependencies > 1){
+                    // verifica se existe a pró
                     if((j + 1) < current_process -> num_dependencies){
                         current_process -> dependencies[j] = current_process -> dependencies[j + 1];
                         current_process -> num_dependencies = current_process -> num_dependencies - 1;

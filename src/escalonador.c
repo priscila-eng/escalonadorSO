@@ -71,6 +71,7 @@ void qreader()
     wait(&status);
 }
 
+// J é o index do processo pronto que vai ser executado
 int executa(int j){
     int pid = 0;
 
@@ -84,6 +85,7 @@ int executa(int j){
         int len = strlen(processes[j].command);
         char time[] = {processes[j].command[len - 2], processes[j].command[len - 1], '\0'};
 
+        // transformando um inteiro em string, porque no execl precisa que todos os argumentos sejam string
         char str[10];
         sprintf(str, "%d", processes[j].id);
         
@@ -120,12 +122,16 @@ int main(int argc, char **argv)
     processes = read_input_file("input.txt", &num_processes);
 
     struct processo finishAux[num_processes];
+
+    // criamos esse for para zerar a lista de processos finalizados,
+    // pois quando criamos o array, percebemos que foi criada com lixo de memória ao invés de zero
     for(int i = 0; i < num_processes; i++){
         finishAux[i].index = 0;
         finishAux[i].mtype = 0;
         finishAux[i].pid = 0;
         finishAux[i].time = 0;
     }
+
     finishProcess = finishAux;
     
     // Abstração do processo de criação e obtenção da fila de mensagens
@@ -135,9 +141,11 @@ int main(int argc, char **argv)
     }
 
     while (1){
+        // evitar que um processo pronto seja executado quando todos os cores estiverem ocupados
         if(num_processes_running == cores){
             continue;
         }
+
         if(num_processes_running == 0){
             int index = getProcessReady(processes);
             if(index == -1){
