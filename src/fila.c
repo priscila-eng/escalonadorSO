@@ -14,6 +14,7 @@ int retorna_fila(int chave)
     struct msqid_ds buf;
 
     // Obtém informações sobre a fila de mensagens
+    // IPC_STAT - flag de status
     if (msgctl(queue, IPC_STAT, &buf) < 0)
     {
         printf("Erro ao obter informações sobre a fila de mensagens\n");
